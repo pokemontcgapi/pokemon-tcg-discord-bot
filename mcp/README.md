@@ -29,4 +29,4 @@ What to know before pointing it at a busy server:
 
 Typecheck, as the CI runs it: `npm run typecheck`. Setup, the API key and the Discord application:
 [../README.md](../README.md). The same MCP server in Claude Desktop, Claude Code, Cursor and VS Code:
-[pokemontcgapi.com/mcp](https://pokemontcgapi.com/mcp).
+[pokemontcgapi.com/mcp](https://pokemontcgapi.com/mcp?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=mcp_readme).

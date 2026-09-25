@@ -16,9 +16,9 @@ The same bot is written four times, so you can start from the language you alrea
 | [`go/`](./go) | [discordgo](https://github.com/bwmarrin/discordgo) + [`github.com/pokemontcgapi/sdk-go`](https://pkg.go.dev/github.com/pokemontcgapi/sdk-go) | `/price` |
 | [`mcp/`](./mcp) | discord.js + Claude + the [`@pokemontcgapi/mcp`](https://www.npmjs.com/package/@pokemontcgapi/mcp) server as its tools | `/ask <question>` |
 
-The data comes from the [Pokémon TCG API](https://pokemontcgapi.com): every card in the
+The data comes from the [Pokémon TCG API](https://pokemontcgapi.com/?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme): every card in the
 international, Japanese and Simplified Chinese print lines, with prices that state their source,
-basis, grade and date. The [trial key](https://pokemontcgapi.com/free-api-key) is free, needs no
+basis, grade and date. The [trial key](https://pokemontcgapi.com/free-api-key?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme) is free, needs no
 credit card, and covers building the bot and running it on a small server.
 
 Unofficial. Not produced, endorsed, supported by or affiliated with Nintendo, Creatures Inc.,
@@ -37,8 +37,12 @@ Europe
   Cardmarket, lowest asking price per print language
 United States
   510.00 USD · guide · 2026-07-30 · TCGplayer
-Index 556.23 EUR · 2026-09-02
+Index 556.23 EUR · 2026-09-02 · Prices via pokemontcgapi.com
 ```
+
+The last line credits the data source. If you run a copy of the bot, keep it: it is how the people
+in your server find where the numbers come from, and it is the only thing asked in return for the
+code.
 
 Nothing is converted and nothing is averaged. Each line prints the basis (an asking price on
 Cardmarket, a guide figure on TCGplayer) and the day the figure is for, because a number without
@@ -47,7 +51,7 @@ chat.
 
 ## Quick start
 
-1. **Get an API key**: the form at [pokemontcgapi.com/free-api-key](https://pokemontcgapi.com/free-api-key)
+1. **Get an API key**: the form at [pokemontcgapi.com/free-api-key](https://pokemontcgapi.com/free-api-key?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme)
    takes an email and a password and gives you the key on the spot. Copy it before you close the
    tab, then confirm the email to raise the trial to 800 credits. Step by step, with the curl
    alternative and what the trial does and does not include: [docs/get-an-api-key.md](./docs/get-an-api-key.md).
@@ -119,7 +123,7 @@ per print language (an English copy and a French copy of the same card are two l
 prices); the TCGplayer row in USD goes under "United States"; the footer carries the composite index
 in EUR with its date. Graded rows are filtered out on purpose: a PSA 10 median under a "Europe"
 heading would be wrong twice, it is a different market and on this API a different plan. A bigger bot
-gives slabs their own command. [How the price rows are built](https://pokemontcgapi.com/blog/how-we-compute-eur-and-usd-card-prices)
+gives slabs their own command. [How the price rows are built](https://pokemontcgapi.com/blog/how-we-compute-eur-and-usd-card-prices?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme)
 is its own article.
 
 **Two calls in parallel, and a reply that survives errors.** The command needs the card (title and
@@ -144,7 +148,7 @@ cd go && go test ./...
 
 ## What it costs to run
 
-Credits per interaction, from the route costs on the [pricing page](https://pokemontcgapi.com/pricing)
+Credits per interaction, from the route costs on the [pricing page](https://pokemontcgapi.com/pricing?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme)
 as of 2026-09-25:
 
 | Interaction | Calls | Credits |
@@ -161,7 +165,7 @@ server that stays busy want a paid plan; the pricing page has the monthly allowa
 Autocomplete is the part that adds up, because it fires on every keystroke after the second. Two
 cheap improvements if the server is busy: ignore focused values shorter than three characters, and
 keep a small in-process cache keyed by the typed prefix for a minute. The
-[Discord bot use case](https://pokemontcgapi.com/use-cases/discord-bot) shows the same command with
+[Discord bot use case](https://pokemontcgapi.com/use-cases/discord-bot?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme) shows the same command with
 plain `fetch` and ETags, where a revalidated lookup answers `304` for free.
 
 `/ask` in the MCP bot costs the same API credits per tool call, plus the Claude tokens of the
@@ -169,7 +173,7 @@ question and the tool results; the model is one constant at the top of `mcp/bot.
 
 ## The MCP bot
 
-`mcp/bot.ts` spawns the [pokemontcgapi MCP server](https://pokemontcgapi.com/mcp) once, reads its
+`mcp/bot.ts` spawns the [pokemontcgapi MCP server](https://pokemontcgapi.com/mcp?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme) once, reads its
 tool list, and hands every tool to Claude as a callable function. A question like *"what is a
 Japanese Umbreon alt art worth in Europe right now?"* becomes one or more tool calls (search, then
 prices) and a short answer that keeps the source, basis and date of every figure, because the tool
@@ -177,7 +181,7 @@ results carry them. The system prompt forbids a price the model did not read fro
 tool is left out: the bot has no photo to send, and that call costs 25 credits every time.
 
 The same server works in Claude Desktop, Claude Code, Cursor and VS Code without a bot in between:
-the [MCP page](https://pokemontcgapi.com/mcp) has the one-line configuration for each.
+the [MCP page](https://pokemontcgapi.com/mcp?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme) has the one-line configuration for each.
 
 ## FAQ
 
@@ -187,7 +191,7 @@ and a review once the bot is in many servers; slash commands avoid both.
 
 **Why does the reply sometimes say "no quote today" for a market?** Because no source observed that
 printing on that market recently enough to serve. The row is absent rather than zero, and the other
-market or the index in the footer may still be present. The [coverage page](https://pokemontcgapi.com/coverage)
+market or the index in the footer may still be present. The [coverage page](https://pokemontcgapi.com/coverage?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme)
 reports how many price rows a probe card returns per region.
 
 **Can I run this on Cloudflare Workers or Bun?** The SDKs can. A gateway bot needs a long-lived
@@ -195,14 +199,14 @@ connection, so the bot process itself belongs on a small always-on host. An HTTP
 without a gateway library would run on Workers.
 
 **Where is the API key allowed to live?** In the bot's environment, never in a message or an embed.
-A key that leaks in chat is a key you rotate at [pokemontcgapi.com/account](https://pokemontcgapi.com/account).
+A key that leaks in chat is a key you rotate at [pokemontcgapi.com/account](https://pokemontcgapi.com/account?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme).
 
 ## Further reading
 
-- [The SDK page](https://pokemontcgapi.com/sdk): every method with the route it wraps, in the three languages.
-- [A Discord price bot with the TypeScript SDK](https://pokemontcgapi.com/blog/discord-price-bot-typescript-sdk): the article the `typescript/` bot comes from.
-- [Give your AI agent card prices with MCP](https://pokemontcgapi.com/blog/give-your-ai-agent-card-prices-with-mcp): how the MCP server is built.
-- [API documentation](https://pokemontcgapi.com/docs) and the [OpenAPI file](https://pokemontcgapi.com/openapi.json).
+- [The SDK page](https://pokemontcgapi.com/sdk?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme): every method with the route it wraps, in the three languages.
+- [A Discord price bot with the TypeScript SDK](https://pokemontcgapi.com/blog/discord-price-bot-typescript-sdk?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme): the article the `typescript/` bot comes from.
+- [Give your AI agent card prices with MCP](https://pokemontcgapi.com/blog/give-your-ai-agent-card-prices-with-mcp?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme): how the MCP server is built.
+- [API documentation](https://pokemontcgapi.com/docs?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme) and the [OpenAPI file](https://pokemontcgapi.com/openapi.json?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=readme).
 
 ## License
 

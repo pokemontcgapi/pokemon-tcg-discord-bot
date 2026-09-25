@@ -16,6 +16,10 @@ LOCALES = ["en", "de", "fr", "es", "it", "pt", "ja", "zh", "ko"]
 
 NO_QUOTE = "no quote today"
 
+# Where the numbers come from, in the footer of every reply. Keep it if you run a copy of this bot:
+# it is how the people in your server find the data, and it costs nothing.
+CREDIT = "Prices via pokemontcgapi.com"
+
 
 def title(card: Card) -> str:
     return f"{card['name']} · {card['set_name']} #{card['number']}"
@@ -61,7 +65,8 @@ def united_states(quotes: Sequence[Price]) -> str:
 
 
 def footer(index: PriceIndex | None) -> str:
-    return f"Index {index['eur']:.2f} EUR · {index['as_of']}" if index else "No index for this card"
+    head = f"Index {index['eur']:.2f} EUR · {index['as_of']}" if index else "No index for this card"
+    return f"{head} · {CREDIT}"
 
 
 def art(card: Card) -> str | None:

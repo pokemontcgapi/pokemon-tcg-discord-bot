@@ -5,11 +5,11 @@ The bots authenticate with one header, `X-Api-Key`, and the SDKs send it for you
 
 ## 1. Fill in the form
 
-Open [pokemontcgapi.com/free-api-key](https://pokemontcgapi.com/free-api-key) and enter an email
+Open [pokemontcgapi.com/free-api-key](https://pokemontcgapi.com/free-api-key?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=docs_get_an_api_key) and enter an email
 and a password.
 
 - The password is not for the API. The key authenticates on its own. The password is what signs you
-  back in at [pokemontcgapi.com/account](https://pokemontcgapi.com/account) to see what you have
+  back in at [pokemontcgapi.com/account](https://pokemontcgapi.com/account?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=docs_get_an_api_key) to see what you have
   spent, rotate the key or upgrade.
 - The key appears on the page as soon as the form is submitted. There is no confirmation link to wait
   for before you can use it.
@@ -45,7 +45,7 @@ roughly 250 `/price` answers plus the autocomplete searches around them (the cos
 - Graded rows (PSA, BGS, CGC) are withheld as well; the bots filter them out anyway.
 - Card recognition from a photo: 5 calls after the email is confirmed, then it is a Growth feature.
 
-After the trial, or for a server that stays busy, the [pricing page](https://pokemontcgapi.com/pricing)
+After the trial, or for a server that stays busy, the [pricing page](https://pokemontcgapi.com/pricing?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=docs_get_an_api_key)
 has the monthly plans, starting at 29 EUR a month.
 
 ## The same signup from the terminal

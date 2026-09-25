@@ -64,6 +64,6 @@ test('the most recent LOW row wins, whatever the order and the variants around i
 });
 
 test('footer carries the composite index with its date, or says there is none', () => {
-  assert.equal(footer(prices.data.index), 'Index 556.23 EUR · 2026-09-02');
-  assert.equal(footer(null), 'No index for this card');
+  assert.equal(footer(prices.data.index), 'Index 556.23 EUR · 2026-09-02 · Prices via pokemontcgapi.com');
+  assert.equal(footer(null), 'No index for this card · Prices via pokemontcgapi.com');
 });

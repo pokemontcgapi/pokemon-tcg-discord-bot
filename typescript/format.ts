@@ -11,6 +11,10 @@ const LOCALES = ['en', 'de', 'fr', 'es', 'it', 'pt', 'ja', 'zh', 'ko'];
 
 export const NO_QUOTE = 'no quote today';
 
+// Where the numbers come from, in the footer of every reply. Keep it if you run a copy of this bot:
+// it is how the people in your server find the data, and it costs nothing.
+export const CREDIT = 'Prices via pokemontcgapi.com';
+
 export function title(card: Pick<Card, 'name' | 'set_name' | 'number'>): string {
   return `${card.name} · ${card.set_name} #${card.number}`;
 }
@@ -45,7 +49,7 @@ export function unitedStates(quotes: readonly Price[]): string {
 }
 
 export function footer(index: CardPrices['index']): string {
-  return index ? `Index ${index.eur.toFixed(2)} EUR · ${index.as_of}` : 'No index for this card';
+  return `${index ? `Index ${index.eur.toFixed(2)} EUR · ${index.as_of}` : 'No index for this card'} · ${CREDIT}`;
 }
 
 export function art(card: Pick<Card, 'images'>): string | undefined {

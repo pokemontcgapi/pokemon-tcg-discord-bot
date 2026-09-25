@@ -95,5 +95,5 @@ def test_the_most_recent_low_row_wins(prices: CardPricesResponse) -> None:
 
 
 def test_footer_carries_the_index_with_its_date_or_says_there_is_none(prices: CardPricesResponse) -> None:
-    assert footer(prices["data"]["index"]) == "Index 556.23 EUR · 2026-09-02"
-    assert footer(None) == "No index for this card"
+    assert footer(prices["data"]["index"]) == "Index 556.23 EUR · 2026-09-02 · Prices via pokemontcgapi.com"
+    assert footer(None) == "No index for this card · Prices via pokemontcgapi.com"

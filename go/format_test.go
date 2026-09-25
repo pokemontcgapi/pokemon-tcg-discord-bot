@@ -105,10 +105,10 @@ func TestTheMostRecentLowRowWins(t *testing.T) {
 }
 
 func TestFooterCarriesTheIndexWithItsDateOrSaysThereIsNone(t *testing.T) {
-	if got := footer(prices(t).Data.Index); got != "Index 556.23 EUR · 2026-09-02" {
+	if got := footer(prices(t).Data.Index); got != "Index 556.23 EUR · 2026-09-02 · Prices via pokemontcgapi.com" {
 		t.Fatalf("got %q", got)
 	}
-	if got := footer(nil); got != "No index for this card" {
+	if got := footer(nil); got != "No index for this card · Prices via pokemontcgapi.com" {
 		t.Fatalf("got %q", got)
 	}
 }

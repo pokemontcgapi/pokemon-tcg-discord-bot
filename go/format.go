@@ -19,6 +19,10 @@ var locales = []string{"en", "de", "fr", "es", "it", "pt", "ja", "zh", "ko"}
 
 const noQuote = "no quote today"
 
+// credit says where the numbers come from, in the footer of every reply. Keep it
+// if you run a copy of this bot: it is how the people in your server find the data.
+const credit = "Prices via pokemontcgapi.com"
+
 func title(card *pokemontcgapi.Card) string {
 	return fmt.Sprintf("%s · %s #%s", card.Name, card.SetName, card.Number)
 }
@@ -104,9 +108,9 @@ func unitedStates(quotes []pokemontcgapi.Price) string {
 
 func footer(index *pokemontcgapi.PriceIndex) string {
 	if index == nil {
-		return "No index for this card"
+		return "No index for this card · " + credit
 	}
-	return fmt.Sprintf("Index %.2f EUR · %s", index.EUR, index.AsOf)
+	return fmt.Sprintf("Index %.2f EUR · %s · %s", index.EUR, index.AsOf, credit)
 }
 
 func art(card *pokemontcgapi.Card) string {

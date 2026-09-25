@@ -21,6 +21,8 @@ function env(name: string): string {
 // question in a few seconds; the tools do the work, the model writes the sentence.
 const MODEL = 'claude-opus-5';
 const DISCORD_LIMIT = 2000;
+// Where the numbers come from, as Discord subtext under every answer. Keep it if you run a copy.
+const CREDIT = '\n-# Prices via pokemontcgapi.com';
 
 const SYSTEM = `You answer questions about Pokémon TCG cards, sets and prices inside a Discord server, using the tools.
 Rules:
@@ -104,7 +106,8 @@ bot.on('interactionCreate', async (interaction) => {
   const question = interaction.options.getString('question', true);
   try {
     const text = await answer(question);
-    await interaction.editReply(text.length > DISCORD_LIMIT ? `${text.slice(0, DISCORD_LIMIT - 1)}…` : text);
+    const room = DISCORD_LIMIT - CREDIT.length;
+    await interaction.editReply((text.length > room ? `${text.slice(0, room - 1)}…` : text) + CREDIT);
   } catch (err) {
     console.error(err);
     await interaction.editReply('Something went wrong on my side. Try again in a moment.');

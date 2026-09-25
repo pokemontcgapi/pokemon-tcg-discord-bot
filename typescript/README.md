@@ -18,6 +18,6 @@ Tests and checks, as the CI runs them:
 npm run typecheck && npm test
 ```
 
-This is the bot from [the article](https://pokemontcgapi.com/blog/discord-price-bot-typescript-sdk),
+This is the bot from [the article](https://pokemontcgapi.com/blog/discord-price-bot-typescript-sdk?utm_source=github&utm_medium=readme&utm_campaign=discord_bot&utm_content=typescript_readme),
 with the formatting moved to its own file so it can be tested. Setup, the API key and the Discord
 application: [../README.md](../README.md).
