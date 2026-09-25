@@ -51,6 +51,49 @@ def test_graded_rows_never_reach_a_market_field(prices: CardPricesResponse) -> N
     assert united_states(raw([{**graded, "source": "TCGPLAYER"}])) == "no quote today"
 
 
+def test_the_most_recent_low_row_wins(prices: CardPricesResponse) -> None:
+    # The shape seen live on bs-4 on 2026-09-25: a July holofoil row first, a September row after it,
+    # and MARKET rows that are not the lowest price.
+    base = prices["data"]["quotes"][0]
+    quotes: list[Price] = [
+        {
+            **base,
+            "currency": "USD",
+            "provenance": "TCGplayer",
+            "basis": "GUIDE",
+            "source": "TCGPLAYER",
+            "variant": "LOW",
+            "amount": 510,
+            "printing": "HOLOFOIL",
+            "as_of": "2026-07-30",
+        },
+        {
+            **base,
+            "currency": "USD",
+            "provenance": "TCGplayer",
+            "basis": "GUIDE",
+            "source": "TCGPLAYER",
+            "variant": "MARKET",
+            "amount": 944.53,
+            "as_of": "2026-09-24",
+        },
+        {
+            **base,
+            "currency": "USD",
+            "provenance": "TCGplayer",
+            "basis": "GUIDE",
+            "source": "TCGPLAYER",
+            "variant": "LOW",
+            "amount": 449.99,
+            "as_of": "2026-09-24",
+        },
+        {**base, "source": "CARDMARKET", "variant": "LOW", "amount": 520, "as_of": "2026-09-01"},
+        {**base, "source": "CARDMARKET", "variant": "LOW", "amount": 499.99, "as_of": "2026-09-24"},
+    ]
+    assert united_states(quotes) == "449.99 USD · guide · 2026-09-24 · TCGplayer"
+    assert europe(quotes) == "EN 499.99 EUR · asking · 2026-09-24\nCardmarket, lowest asking price per print language"
+
+
 def test_footer_carries_the_index_with_its_date_or_says_there_is_none(prices: CardPricesResponse) -> None:
     assert footer(prices["data"]["index"]) == "Index 556.23 EUR · 2026-09-02"
     assert footer(None) == "No index for this card"

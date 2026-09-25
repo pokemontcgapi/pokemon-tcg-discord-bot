@@ -31,11 +31,19 @@ def _locale_rank(q: Price) -> int:
     return LOCALES.index(locale) if locale in LOCALES else -1
 
 
+def _newest(rows: Sequence[Price]) -> Price | None:
+    """The most recent row: a source can hold a July row next to a September one for the same card."""
+    best: Price | None = None
+    for q in rows:
+        if best is None or q["as_of"] > best["as_of"]:
+            best = q
+    return best
+
+
 def europe(quotes: Sequence[Price]) -> str:
-    rows = sorted(
-        (q for q in raw(quotes) if q["source"] == "CARDMARKET" and q["variant"] == "LOW"),
-        key=_locale_rank,
-    )
+    low = [q for q in raw(quotes) if q["source"] == "CARDMARKET" and q["variant"] == "LOW"]
+    per_locale = [_newest([q for q in low if q["locale"] == loc]) for loc in dict.fromkeys(q["locale"] for q in low)]
+    rows = sorted((q for q in per_locale if q is not None), key=_locale_rank)
     if not rows:
         return NO_QUOTE
     lines = [
@@ -46,7 +54,7 @@ def europe(quotes: Sequence[Price]) -> str:
 
 
 def united_states(quotes: Sequence[Price]) -> str:
-    q = next((row for row in raw(quotes) if row["source"] == "TCGPLAYER"), None)
+    q = _newest([row for row in raw(quotes) if row["source"] == "TCGPLAYER" and row["variant"] == "LOW"])
     if q is None:
         return NO_QUOTE
     return f"{q['amount']:.2f} {q['currency']} · {q['basis'].lower()} · {q['as_of']} · {q['provenance']}"

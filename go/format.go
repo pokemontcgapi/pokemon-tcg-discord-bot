@@ -42,13 +42,33 @@ func locale(q pokemontcgapi.Price) string {
 	return *q.Locale
 }
 
-func europe(quotes []pokemontcgapi.Price) string {
-	var rows []pokemontcgapi.Price
-	for _, q := range raw(quotes) {
-		if q.Source == "CARDMARKET" && q.Variant == "LOW" {
-			rows = append(rows, q)
+// newest keeps, for each key, the most recent row: a source can hold a July
+// row next to a September one for the same card, and the reply shows the fresh one.
+func newest(quotes []pokemontcgapi.Price, key func(pokemontcgapi.Price) string) []pokemontcgapi.Price {
+	var out []pokemontcgapi.Price
+	at := map[string]int{}
+	for _, q := range quotes {
+		k := key(q)
+		i, seen := at[k]
+		switch {
+		case !seen:
+			at[k] = len(out)
+			out = append(out, q)
+		case q.AsOf > out[i].AsOf:
+			out[i] = q
 		}
 	}
+	return out
+}
+
+func europe(quotes []pokemontcgapi.Price) string {
+	var low []pokemontcgapi.Price
+	for _, q := range raw(quotes) {
+		if q.Source == "CARDMARKET" && q.Variant == "LOW" {
+			low = append(low, q)
+		}
+	}
+	rows := newest(low, locale)
 	if len(rows) == 0 {
 		return noQuote
 	}
@@ -68,12 +88,18 @@ func europe(quotes []pokemontcgapi.Price) string {
 }
 
 func unitedStates(quotes []pokemontcgapi.Price) string {
+	var low []pokemontcgapi.Price
 	for _, q := range raw(quotes) {
-		if q.Source == "TCGPLAYER" {
-			return fmt.Sprintf("%.2f %s · %s · %s · %s", q.Amount, q.Currency, strings.ToLower(q.Basis), q.AsOf, q.Provenance)
+		if q.Source == "TCGPLAYER" && q.Variant == "LOW" {
+			low = append(low, q)
 		}
 	}
-	return noQuote
+	rows := newest(low, func(pokemontcgapi.Price) string { return "" })
+	if len(rows) == 0 {
+		return noQuote
+	}
+	q := rows[0]
+	return fmt.Sprintf("%.2f %s · %s · %s · %s", q.Amount, q.Currency, strings.ToLower(q.Basis), q.AsOf, q.Provenance)
 }
 
 func footer(index *pokemontcgapi.PriceIndex) string {

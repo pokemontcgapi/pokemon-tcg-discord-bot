@@ -48,6 +48,21 @@ test('graded rows never reach a market field', () => {
   assert.equal(unitedStates(raw([{ ...graded, source: 'TCGPLAYER' }])), 'no quote today');
 });
 
+test('the most recent LOW row wins, whatever the order and the variants around it', () => {
+  // The shape seen live on bs-4 on 2026-09-25: a July holofoil row first, a September row after it,
+  // and MARKET rows that are not the lowest price.
+  const base = first();
+  const quotes: Price[] = [
+    { ...base, source: 'TCGPLAYER', variant: 'LOW', basis: 'GUIDE', amount: 510, currency: 'USD', printing: 'HOLOFOIL', as_of: '2026-07-30', provenance: 'TCGplayer' },
+    { ...base, source: 'TCGPLAYER', variant: 'MARKET', basis: 'GUIDE', amount: 944.53, currency: 'USD', printing: null, as_of: '2026-09-24', provenance: 'TCGplayer' },
+    { ...base, source: 'TCGPLAYER', variant: 'LOW', basis: 'GUIDE', amount: 449.99, currency: 'USD', printing: null, as_of: '2026-09-24', provenance: 'TCGplayer' },
+    { ...base, source: 'CARDMARKET', variant: 'LOW', amount: 520, as_of: '2026-09-01' },
+    { ...base, source: 'CARDMARKET', variant: 'LOW', amount: 499.99, as_of: '2026-09-24' },
+  ];
+  assert.equal(unitedStates(quotes), '449.99 USD · guide · 2026-09-24 · TCGplayer');
+  assert.equal(europe(quotes), 'EN 499.99 EUR · asking · 2026-09-24\nCardmarket, lowest asking price per print language');
+});
+
 test('footer carries the composite index with its date, or says there is none', () => {
   assert.equal(footer(prices.data.index), 'Index 556.23 EUR · 2026-09-02');
   assert.equal(footer(null), 'No index for this card');

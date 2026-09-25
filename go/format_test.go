@@ -76,6 +76,34 @@ func TestGradedRowsNeverReachAMarketField(t *testing.T) {
 	}
 }
 
+func TestTheMostRecentLowRowWins(t *testing.T) {
+	// The shape seen live on bs-4 on 2026-09-25: a July holofoil row first, a September row after it,
+	// and MARKET rows that are not the lowest price.
+	base := prices(t).Data.Quotes[0]
+	row := func(source, variant string, amount float64, currency, asOf string) pokemontcgapi.Price {
+		q := base
+		q.Source, q.Variant, q.Amount, q.Currency, q.AsOf = source, variant, amount, currency, asOf
+		if source == "TCGPLAYER" {
+			q.Provenance, q.Basis = "TCGplayer", "GUIDE"
+		}
+		return q
+	}
+	quotes := []pokemontcgapi.Price{
+		row("TCGPLAYER", "LOW", 510, "USD", "2026-07-30"),
+		row("TCGPLAYER", "MARKET", 944.53, "USD", "2026-09-24"),
+		row("TCGPLAYER", "LOW", 449.99, "USD", "2026-09-24"),
+		row("CARDMARKET", "LOW", 520, "EUR", "2026-09-01"),
+		row("CARDMARKET", "LOW", 499.99, "EUR", "2026-09-24"),
+	}
+	if got := unitedStates(quotes); got != "449.99 USD · guide · 2026-09-24 · TCGplayer" {
+		t.Fatalf("unitedStates: got %q", got)
+	}
+	want := "EN 499.99 EUR · asking · 2026-09-24\nCardmarket, lowest asking price per print language"
+	if got := europe(quotes); got != want {
+		t.Fatalf("europe: got %q", got)
+	}
+}
+
 func TestFooterCarriesTheIndexWithItsDateOrSaysThereIsNone(t *testing.T) {
 	if got := footer(prices(t).Data.Index); got != "Index 556.23 EUR · 2026-09-02" {
 		t.Fatalf("got %q", got)
