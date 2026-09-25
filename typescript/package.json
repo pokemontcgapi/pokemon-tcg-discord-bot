@@ -1,0 +1,21 @@
+{
+  "name": "pokemon-tcg-discord-bot-typescript",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Discord /price command for Pokémon cards with the pokemontcgapi TypeScript SDK and discord.js",
+  "engines": { "node": ">=22.6" },
+  "scripts": {
+    "start": "node --env-file=.env --experimental-strip-types bot.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test --experimental-strip-types format.test.ts"
+  },
+  "dependencies": {
+    "@pokemontcgapi/sdk": "^0.1.5",
+    "discord.js": "^14.27.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "typescript": "^5.7.3"
+  }
+}

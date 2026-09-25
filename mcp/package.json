@@ -1,0 +1,21 @@
+{
+  "name": "pokemon-tcg-discord-bot-mcp",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Discord /ask command answered by Claude with the pokemontcgapi MCP server as its tools",
+  "engines": { "node": ">=22.6" },
+  "scripts": {
+    "start": "node --env-file=.env --experimental-strip-types bot.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "@modelcontextprotocol/sdk": "^1.30.1",
+    "discord.js": "^14.27.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "typescript": "^5.7.3"
+  }
+}
