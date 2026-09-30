@@ -153,7 +153,7 @@ as of 2026-09-25:
 
 | Interaction | Calls | Credits |
 |---|---|---|
-| One autocomplete keystroke (after two characters) | card search | 1 |
+| One autocomplete keystroke (after two characters) | card search (a page under 50 rows) | 1 |
 | One `/price` answer | card lookup + current prices | 3 |
 | A quiet server, 50 lookups a day | about 150 searches and 100 calls | about 300 a day |
 
